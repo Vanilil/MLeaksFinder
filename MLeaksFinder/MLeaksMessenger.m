@@ -33,7 +33,7 @@ static __weak UIAlertController *alertView;
         [delegate alertView:alertViewTemp clickedButtonAtIndex:0];
     }]];
     
-    [alertViewTemp addAction:[UIAlertAction actionWithTitle:additionalButtonTitle
+    [alertViewTemp addAction:[UIAlertAction actionWithTitle:((additionalButtonTitle != nil) ? additionalButtonTitle : @"Default")
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
         [delegate alertView:alertViewTemp clickedButtonAtIndex:1];
