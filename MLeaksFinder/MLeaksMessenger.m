@@ -30,18 +30,28 @@ static __weak UIAlertController *alertView;
     [alertViewTemp addAction:[UIAlertAction actionWithTitle:@"OK"
                                                       style:UIAlertActionStyleCancel
                                                     handler:^(UIAlertAction * _Nonnull action) {
-        [delegate alertView:alertViewTemp clickedButtonAtIndex:0];
+        [delegate alertViewClickedButtonAtIndex:0];
     }]];
     
-    [alertViewTemp addAction:[UIAlertAction actionWithTitle:((additionalButtonTitle != nil) ? additionalButtonTitle : @"Default")
+    NSString *defaultTitle = ((additionalButtonTitle != nil) ? additionalButtonTitle : @"Default");
+    [alertViewTemp addAction:[UIAlertAction actionWithTitle:defaultTitle
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-        [delegate alertView:alertViewTemp clickedButtonAtIndex:1];
+        [delegate alertViewClickedButtonAtIndex:1];
     }]];
     
-    UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    if (rootViewController != nil && rootViewController.presentedViewController != nil) {
-        [rootViewController.presentedViewController presentViewController:alertViewTemp animated:YES completion:nil];
+    UIWindow *window = [UIApplication sharedApplication].delegate.window;
+    if (@available(iOS 13.0, *)) {
+        UIScene *scene = [UIApplication sharedApplication].connectedScenes.allObjects.firstObject;
+        if (scene && [scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            if (windowScene.windows.count > 0)
+                window = [windowScene.windows objectAtIndex:0];
+        }
+    }
+    
+    if (window != nil && window.rootViewController != nil) {
+        [window.rootViewController presentViewController:alertViewTemp animated:YES completion:nil];
     }
     
     alertView = alertViewTemp;

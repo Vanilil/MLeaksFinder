@@ -14,7 +14,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol MLeaksAlertDelegate <NSObject>
-- (void)alertView:(UIAlertController *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+- (void)alertViewClickedButtonAtIndex:(NSInteger)buttonIndex;
 @end
 
 @interface MLeaksMessenger : NSObject

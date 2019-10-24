@@ -84,7 +84,7 @@ static NSMutableSet *leakedObjectPtrs;
 
 #pragma mark - UIAlertControllerDelegate
 
-- (void)alertView:(UIAlertController *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)alertViewClickedButtonAtIndex:(NSInteger)buttonIndex {
     if (!buttonIndex) {
         return;
     }
