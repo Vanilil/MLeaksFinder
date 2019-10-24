@@ -12,7 +12,7 @@
 
 #import "MLeaksMessenger.h"
 
-static __weak UIAlertView *alertView;
+static __weak UIAlertController *alertView;
 
 @implementation MLeaksMessenger
 
@@ -22,15 +22,28 @@ static __weak UIAlertView *alertView;
 
 + (void)alertWithTitle:(NSString *)title
                message:(NSString *)message
-              delegate:(id<UIAlertViewDelegate>)delegate
+              delegate:(id<MLeaksAlertDelegate>)delegate
  additionalButtonTitle:(NSString *)additionalButtonTitle {
-    [alertView dismissWithClickedButtonIndex:0 animated:NO];
-    UIAlertView *alertViewTemp = [[UIAlertView alloc] initWithTitle:title
-                                                            message:message
-                                                           delegate:delegate
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:additionalButtonTitle, nil];
-    [alertViewTemp show];
+    UIAlertController *alertViewTemp = [UIAlertController alertControllerWithTitle:title
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+    [alertViewTemp addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+        [delegate alertView:alertViewTemp clickedButtonAtIndex:0];
+    }]];
+    
+    [alertViewTemp addAction:[UIAlertAction actionWithTitle:additionalButtonTitle
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+        [delegate alertView:alertViewTemp clickedButtonAtIndex:1];
+    }]];
+    
+    UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+    if (rootViewController != nil && rootViewController.presentedViewController != nil) {
+        [rootViewController.presentedViewController presentViewController:alertViewTemp animated:YES completion:nil];
+    }
+    
     alertView = alertViewTemp;
     
     NSLog(@"%@: %@", title, message);

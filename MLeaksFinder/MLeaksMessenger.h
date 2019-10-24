@@ -13,12 +13,16 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@protocol MLeaksAlertDelegate <NSObject>
+- (void)alertView:(UIAlertController *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+@end
+
 @interface MLeaksMessenger : NSObject
 
 + (void)alertWithTitle:(NSString *)title message:(NSString *)message;
 + (void)alertWithTitle:(NSString *)title
                message:(NSString *)message
-              delegate:(id<UIAlertViewDelegate>)delegate
+              delegate:(id<MLeaksAlertDelegate>)delegate
  additionalButtonTitle:(NSString *)additionalButtonTitle;
 
 @end
